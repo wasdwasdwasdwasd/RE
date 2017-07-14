@@ -207,7 +207,7 @@ def GetResolvePushImmediate(addr):
 	return immPush
 
 #Main
-def main():
+def Main():
 	codeSegments = GetExecutableSegments()
 	
 	#Iterate Segments
@@ -239,4 +239,4 @@ def main():
 					
 #Script Entry
 if __name__ == "__main__":
-	main()
+	Main()

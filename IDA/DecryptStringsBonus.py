@@ -408,7 +408,7 @@ def InitEmulator():
 	emu.set_library_handler("strcpy", hookStrcpy)
 
 #Main
-def main():
+def Main():
 	InitEmulator()
 	codeSegments = GetExecutableSegments()
 	
@@ -443,4 +443,4 @@ def main():
 					
 #Script Entry
 if __name__ == "__main__":
-	main()
+	Main()

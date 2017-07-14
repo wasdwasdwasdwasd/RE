@@ -55,7 +55,7 @@ def GetResolvePushImmediate(addr):
 
 #Worker function which traces the register to the first argument pushed
 #to one of the init funcs
-def traceRegisterToStringAddr(addr, reg, initfuncs):
+def TraceRegisterToStringAddr(addr, reg, initfuncs):
 	start = idc.GetFunctionAttr(addr, FUNCATTR_START)
 	iter = addr
 	stringAddr = -1
@@ -99,7 +99,7 @@ def traceRegisterToStringAddr(addr, reg, initfuncs):
 			
 	return stringAddr
 	
-def getString(stringAddr):
+def GetString(stringAddr):
 	string = ""
 	idx = 0
 	while True:
@@ -111,7 +111,7 @@ def getString(stringAddr):
 		idx += 1
 	return string
 
-def renameMemory(mem, string):
+def RenameMemory(mem, string):
 	string = "g_" + string
 	idc.MakeRptCmt(mem, string)
 	idc.MakeNameEx(mem, string, SN_NOCHECK | SN_NOWARN)
@@ -121,7 +121,7 @@ def renameMemory(mem, string):
 #it will follow the register written to memory
 #and if the register is the output of any of the initfuncs
 #it will trace the parameters and get the string and rename the memory
-def renameGlobals(start, end, initfuncs):
+def RenameGlobals(start, end, initfuncs):
 	iter = end
 	
 	#Iterate addresses
@@ -140,18 +140,18 @@ def renameGlobals(start, end, initfuncs):
 				mem = idc.GetOperandValue(iter, 0)
 				reg = idc.GetOpnd(iter, 1)
 	
-				stringAddr = traceRegisterToStringAddr(iter, reg, initfuncs)
+				stringAddr = TraceRegisterToStringAddr(iter, reg, initfuncs)
 				if stringAddr != -1:
-					string = getString(stringAddr)
+					string = GetString(stringAddr)
 					print "[+]Renamed 0x%08X to %s" % (mem, string)
-					renameMemory(mem, string)
+					RenameMemory(mem, string)
 		
 		#Iterate
 		iter = idc.PrevHead(iter)
 	
 	
 #Main
-def main():
+def Main():
 	#Init function 
 	start = 0x1000AAF0
 	end = 0x1000BAD4
@@ -166,8 +166,8 @@ def main():
 	initfuncs.append(0x101D4A5C)	#InitVector
 
 	#Rename globals
-	renameGlobals(start, end, initfuncs)
+	RenameGlobals(start, end, initfuncs)
 					
 #Script Entry
 if __name__ == "__main__":
-	main()
+	Main()
